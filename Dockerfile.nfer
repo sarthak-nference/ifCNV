@@ -1,0 +1,40 @@
+# Use the specified base image
+FROM hz-registry.nferx.com/ubuntu as worker
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Install required packages and dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    openjdk-17-jdk \
+    python3-pip \
+    python3-venv \
+    git \
+    build-essential \
+    libtool \
+    zlib1g-dev \
+    liblzma-dev \
+    git-lfs && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set up Python environment and install packages
+RUN python3 -m venv venv && \
+    . venv/bin/activate && \
+    pip install --upgrade pip setuptools wheel && \
+    pip install Flask pandas && \
+    pip cache purge && \
+    ln -s /usr/bin/python3 /usr/bin/python && \
+
+
+# Copy the entire SnpEff directory into the container
+COPY . /usr/src/app/ifCNV/
+# Ensure script_build directory exists and has necessary permissions
+RUN /bin/sh -c 'echo "Current working directory is: $(pwd)"'
+# Build the SnpEff jar file
+RUN cd ifCNV && \
+    mv ifCNV.tar.gz /usr/src/app/ifCNV.tar.gz && \
+    tar -xvf /usr/src/app/ifCNV.tar.gz && \
+    cd .. && \
+    rm -rf ifCNV
+
