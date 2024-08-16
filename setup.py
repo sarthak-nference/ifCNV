@@ -12,6 +12,8 @@ setuptools.setup(
         'pandas>=1.3',
         'scikit-learn>=1.0.1',
         'plotly>=5.4',
-        "pybedtools>=0.8.2"
-    ]
+        "pybedtools>=0.8.2",
+        "importlib-resources"
+    ],
+    scripts=['ifCNV/ifCNV'],
 )
