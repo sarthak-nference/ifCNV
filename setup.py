@@ -13,7 +13,7 @@ setuptools.setup(
         'scikit-learn>=1.0.1',
         'plotly>=5.4',
         "pybedtools>=0.8.2",
-        "importlib-resources"
+        "importlib_resources"
     ],
     scripts=['script/ifCNV']
 )
