@@ -15,5 +15,5 @@ setuptools.setup(
         "pybedtools>=0.8.2",
         "importlib-resources"
     ],
-    scripts=['ifCNV/ifCNV'],
+    scripts=['script/ifCNV']
 )
