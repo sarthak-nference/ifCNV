@@ -7,7 +7,7 @@ import argparse
 #
 ###############################################################################
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='ifCNV')
+    parser = argparse.ArgumentParser(description='CNV')
 
     group_mandatory = parser.add_argument_group('Mandatory')
     group_mandatory.add_argument(
@@ -130,4 +130,4 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    ifCNV.main(args)
+    CNV.main(args)
