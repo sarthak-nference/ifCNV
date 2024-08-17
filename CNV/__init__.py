@@ -17,8 +17,7 @@ from pybedtools import BedTool
 
 def generateReport(final, output_dir, reads, ressources, CNVneg):
     if not os.path.isdir(output_dir):
-        cmd = ["mkdir", output_dir]
-        subprocess.check_output(cmd)
+        os.makedirs(output_dir)
 
     cmd = ["cp", "-r", ressources, output_dir]
     subprocess.check_output(cmd)
@@ -281,7 +280,45 @@ def aberrantSamples(reads, conta='auto', verbose=True):
 
     return (res, norm)
 
+def load_bed(bedFile):
+    try:
+        with open(bedFile, 'r') as f:
+            content = f.readlines()
+        content = [line.strip() for line in content]
+    except IOError as e:
+        print(f"Error opening BED file {bedFile}: {e}")
+        return None
 
+    data = []
+    for line in content:
+        try:
+            fields = line.split()
+            if len(fields) < 3:
+                raise ValueError(f"Invalid BED line: {line}")
+            chrom, start, end = fields[:3]
+            start, end = int(start), int(end)
+            if start > end:
+                raise ValueError(f"Start position {start} is greater than end position {end} in line: {line}")
+            data.append([chrom, start, end])
+        except ValueError as e:
+            print(f"Skipping invalid BED line: {e}")
+            continue
+
+    return pd.DataFrame(data, columns=["chrom", "start", "end"])
+
+
+def process_bam_files(bam_file_paths):
+    processed_data = []
+    for file_path in bam_file_paths:
+        try:
+            cmd = ['samtools', 'view', '-F', '4', file_path]
+            output = subprocess.check_output(cmd)
+            processed_data.append(output.decode('utf-8'))
+        except subprocess.CalledProcessError as e:
+            print(f"Error processing BAM file {file_path}: {e}")
+            continue
+    return processed_data
+	
 def aberrantAmpliconsPerSample(name, reads_norm, CNVneg, conta=0.01):
     if conta != 'auto':
         if conta != 'none':
