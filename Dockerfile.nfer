@@ -5,10 +5,11 @@ WORKDIR /usr/src/app
 
 # Install required packages and dependencies
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install -y python3.9 \
+    python3.9-dev \
     openjdk-17-jdk \
     python3-pip \
-    python3-venv \
+    python3.9-venv \
     git \
     build-essential \
     libtool \
@@ -18,10 +19,13 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Set up Python environment and install packages
-RUN python3 -m venv venv && \
+RUN python3.9 -m venv venv && \
     . venv/bin/activate && \
-    pip install --upgrade pip setuptools wheel && \
-    pip install Flask pandas && \
+    pip install --upgrade pip && \
+    pip install setuptools && \
+    pip install wheel --upgrade && \
+    pip install Flask && \
+    pip install pandas && \
     pip cache purge && \
     ln -s /usr/bin/python3 /usr/bin/python
 
@@ -30,7 +34,8 @@ COPY . /usr/src/app/IFCNV/
 
 # Build the ifCNV executable
 RUN cd IFCNV && \
-    pyinstaller --onefile --hidden-import=numpy --hidden-import=importlib_resources --hidden-import=joblib --hidden-import=scipy --hidden-import=threadpoolctl --hidden-import=pysam --hidden-import=python-dateutil --hidden-import=pytz --hidden-import=tzdata --hidden-import=importlib.resources --add-data "CNV/ressources:CNV/ressources" script/ifCNV
+    chmod +x build.sh && \
+    ./build.sh && \
     cp /usr/src/app/IFCNV/dist/ifCNV /usr/src/app/ifCNV
     chmod +x /usr/src/app/ifCNV && \
     rm -rf /usr/src/app/IFCNV/dist /usr/src/app/IFCNV/build /usr/src/app/IFCNV/__pycache__ /usr/src/app/IFCNV/*.spec
