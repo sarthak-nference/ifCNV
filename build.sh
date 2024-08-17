@@ -1,0 +1,1 @@
+pyinstaller --onefile --hidden-import=numpy --hidden-import=importlib_resources --hidden-import=joblib --hidden-import=scipy --hidden-import=threadpoolctl --hidden-import=pysam --hidden-import=python-dateutil --hidden-import=pytz --hidden-import=tzdata --hidden-import=importlib.resources --add-data "CNV/ressources:CNV/ressources" script/ifCNV
