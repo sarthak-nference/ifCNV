@@ -25,6 +25,7 @@ RUN python3.9 -m venv venv && \
     pip install setuptools && \
     pip install wheel --upgrade && \
     pip install Flask && \
+    pip install pyinstaller && \
     pip install pandas && \
     pip cache purge && \
     ln -s /usr/bin/python3 /usr/bin/python
