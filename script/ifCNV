@@ -386,10 +386,12 @@ def aberrantAmpliconsFinal(reads, reads_norm, CNVpos, CNVneg, scoreThreshold=10,
 #
 ###############################################################################
 def main(args):
+    # Determine the path to the ressources directory
     if args.lib_ressources is None:
-        lib_ressources = f"{os.path.dirname(os.path.abspath(__file__))}/ressources"
+        lib_ressources = resource_path("CNV/ressources")
     else:
         lib_ressources = args.lib_ressources
+
     # Create or open the reads matrix
     if args.skip is None:
         reads = createReadsMatrix(pathToBam=args.input, bedFile=args.bed, verbose=args.verbose, output=args.readsMatrixOuptut)
@@ -424,7 +426,7 @@ def main(args):
     generateReport(final, output_dir=args.output, reads=normReads, ressources=lib_ressources, CNVneg=CNVneg)
 
     if args.verbose:
-        print("ifCNV analysis done succesfully !\n")
+        print("ifCNV analysis done successfully!\n")
 
     if args.autoOpen:
         try:
@@ -434,7 +436,6 @@ def main(args):
                 subprocess.call(['open', f"{args.output}/run.html"])
             except:
                 print('Could not open URL')
-
 ###############################################################################
 #
 # MAIN ENTRY POINT
