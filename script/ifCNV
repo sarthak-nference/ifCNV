@@ -380,6 +380,15 @@ def aberrantAmpliconsFinal(reads, reads_norm, CNVpos, CNVneg, scoreThreshold=10,
         print(f"{str(f.shape[0])} aberrant regions found in {str(len(np.unique(f['Sample name'])))} samples.\n")
 
     return f
+
+def resource_path(relative_path):
+    """ Get the absolute path to a resource, handling PyInstaller's _MEIPASS """
+    if getattr(sys, '_MEIPASS', False):
+        # Running in PyInstaller bundle
+        return os.path.join(sys._MEIPASS, relative_path)
+    else:
+        # Running in normal Python environment
+        return os.path.join(os.path.abspath("."), relative_path)
 ###############################################################################
 #
 # MAIN
